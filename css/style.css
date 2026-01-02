@@ -1,0 +1,896 @@
+/* ============================================
+   新春おみくじ 2026 - スタイルシート
+   ============================================ */
+
+:root {
+    /* 和の色彩 */
+    --aka: #C41E3A;           /* 紅 */
+    --kurenai: #D0104C;       /* 紅 */
+    --kincha: #C7802D;        /* 金茶 */
+    --kin: #D4AF37;           /* 金 */
+    --shiro: #FFFEF8;         /* 白 */
+    --sumi: #1C1C1C;          /* 墨 */
+    --enji: #9B2335;          /* 臙脂 */
+    --sakura: #FEDFE1;        /* 桜 */
+    --matcha: #7B8D42;        /* 抹茶 */
+    --fuji: #8B81C3;          /* 藤 */
+    --asagi: #48929B;         /* 浅葱 */
+    --kitsune: #F0D08A;       /* 狐 */
+    
+    /* 背景グラデーション */
+    --bg-gradient: linear-gradient(
+        180deg,
+        #1a0a0a 0%,
+        #2d1215 30%,
+        #3d1a1f 60%,
+        #1a0a0a 100%
+    );
+    
+    /* フォント */
+    --font-mincho: 'Shippori Mincho', 'Yu Mincho', 'Hiragino Mincho ProN', serif;
+    --font-antique: 'Zen Antique', serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-mincho);
+    background: var(--bg-gradient);
+    color: var(--shiro);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* ============================================
+   背景装飾
+   ============================================ */
+
+.bg-decoration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+/* 和柄パターン（市松模様風） */
+.bg-decoration::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(196, 30, 58, 0.05) 0%, transparent 50%);
+    z-index: 1;
+}
+
+/* 桜の花びら */
+.sakura-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+
+.sakura {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: var(--sakura);
+    border-radius: 50% 0 50% 50%;
+    opacity: 0.6;
+    animation: sakuraFall linear infinite;
+    transform-origin: center center;
+}
+
+@keyframes sakuraFall {
+    0% {
+        transform: translateY(-10vh) rotate(0deg) translateX(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.6;
+    }
+    90% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateY(110vh) rotate(720deg) translateX(100px);
+        opacity: 0;
+    }
+}
+
+/* ============================================
+   レイアウト
+   ============================================ */
+
+.container {
+    position: relative;
+    z-index: 10;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.screen {
+    display: none;
+    width: 100%;
+    max-width: 480px;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.screen.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================
+   タイトル画面
+   ============================================ */
+
+.title-content {
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.year-badge {
+    display: inline-block;
+    font-family: var(--font-antique);
+    font-size: 1.2rem;
+    color: var(--kin);
+    border: 2px solid var(--kin);
+    padding: 0.3rem 1.5rem;
+    border-radius: 2px;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.3em;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+.main-title {
+    font-family: var(--font-antique);
+    font-size: 2.8rem;
+    color: var(--shiro);
+    text-shadow: 
+        0 0 20px rgba(212, 175, 55, 0.4),
+        2px 2px 4px rgba(0, 0, 0, 0.5);
+    margin-bottom: 1rem;
+    letter-spacing: 0.15em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.title-deco {
+    font-size: 2rem;
+    animation: gentle-sway 3s ease-in-out infinite;
+}
+
+.title-deco.right {
+    animation-delay: -1.5s;
+}
+
+@keyframes gentle-sway {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: var(--kitsune);
+    opacity: 0.9;
+    letter-spacing: 0.2em;
+    margin-bottom: 3rem;
+}
+
+/* おみくじ箱 */
+.omikuji-box {
+    position: relative;
+    width: 120px;
+    height: 160px;
+    margin: 0 auto 2.5rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.omikuji-box:hover {
+    transform: scale(1.05);
+}
+
+.box-top {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 25px;
+    background: linear-gradient(180deg, var(--kincha) 0%, #8B5A2B 100%);
+    border-radius: 5px 5px 0 0;
+    z-index: 3;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.box-top::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    background: var(--kin);
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+.box-body {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90px;
+    height: 130px;
+    background: linear-gradient(180deg, #8B0000 0%, var(--enji) 50%, #5C0A0A 100%);
+    border-radius: 0 0 10px 10px;
+    z-index: 2;
+    box-shadow: 
+        inset 0 5px 15px rgba(0, 0, 0, 0.3),
+        0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.box-body::before {
+    content: '御神籤';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(0deg);
+    font-family: var(--font-antique);
+    font-size: 1rem;
+    color: var(--kin);
+    writing-mode: vertical-rl;
+    letter-spacing: 0.3em;
+    text-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+}
+
+.box-slot {
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 15px;
+    background: var(--sumi);
+    border-radius: 4px 4px 0 0;
+}
+
+/* おみくじ棒 */
+.sticks {
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 60px;
+    z-index: 4;
+}
+
+.stick {
+    position: absolute;
+    bottom: 0;
+    width: 4px;
+    height: 50px;
+    background: linear-gradient(180deg, #F5DEB3 0%, #DEB887 50%, #D2B48C 100%);
+    border-radius: 2px;
+    transform-origin: bottom center;
+}
+
+.stick:nth-child(1) { left: 5px; transform: rotate(-15deg); }
+.stick:nth-child(2) { left: 9px; transform: rotate(-7deg); }
+.stick:nth-child(3) { left: 13px; transform: rotate(0deg); }
+.stick:nth-child(4) { left: 17px; transform: rotate(7deg); }
+.stick:nth-child(5) { left: 21px; transform: rotate(15deg); }
+
+/* ボタン */
+.draw-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 1.2rem 3rem;
+    background: linear-gradient(180deg, var(--aka) 0%, var(--enji) 100%);
+    border: 3px solid var(--kin);
+    border-radius: 8px;
+    color: var(--shiro);
+    font-family: var(--font-antique);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 
+        0 5px 20px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    margin: 0 auto;
+}
+
+.draw-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 
+        0 8px 30px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(212, 175, 55, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.draw-button:active {
+    transform: translateY(0);
+}
+
+.button-text {
+    font-size: 1.4rem;
+    letter-spacing: 0.2em;
+}
+
+.button-sub {
+    font-size: 0.8rem;
+    opacity: 0.8;
+    letter-spacing: 0.1em;
+}
+
+/* 引き済み表示 */
+.already-drawn {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.already-drawn.hidden {
+    display: none;
+}
+
+.drawn-message {
+    font-size: 1.1rem;
+    color: var(--kitsune);
+    margin-bottom: 0.5rem;
+}
+
+.next-time {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    margin-bottom: 1.5rem;
+}
+
+.show-result-button {
+    padding: 0.8rem 2rem;
+    background: transparent;
+    border: 2px solid var(--kin);
+    border-radius: 5px;
+    color: var(--kin);
+    font-family: var(--font-mincho);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.show-result-button:hover {
+    background: rgba(212, 175, 55, 0.1);
+}
+
+/* ============================================
+   演出画面
+   ============================================ */
+
+.drawing-content {
+    text-align: center;
+    padding: 4rem 0;
+}
+
+.drawing-box {
+    position: relative;
+    width: 150px;
+    height: 200px;
+    margin: 0 auto 3rem;
+}
+
+.box-shake {
+    animation: shakeBox 0.5s ease-in-out infinite;
+}
+
+@keyframes shakeBox {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+}
+
+.drawing-box .box-top {
+    width: 130px;
+    height: 30px;
+}
+
+.drawing-box .box-body {
+    width: 115px;
+    height: 160px;
+}
+
+.rising-stick {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 0;
+    background: linear-gradient(180deg, #F5DEB3 0%, #DEB887 50%, #D2B48C 100%);
+    border-radius: 4px;
+    z-index: 10;
+    transition: height 1s ease-out;
+}
+
+.rising-stick.rise {
+    height: 120px;
+}
+
+.stick-number {
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-antique);
+    font-size: 0.7rem;
+    color: var(--sumi);
+    writing-mode: vertical-rl;
+    opacity: 0;
+    transition: opacity 0.5s ease 0.5s;
+}
+
+.rising-stick.rise .stick-number {
+    opacity: 1;
+}
+
+.drawing-text {
+    font-size: 1.2rem;
+    color: var(--kitsune);
+    letter-spacing: 0.1em;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* ============================================
+   結果画面
+   ============================================ */
+
+.result-content {
+    padding: 1rem 0;
+}
+
+.result-card {
+    background: linear-gradient(180deg, 
+        rgba(255, 254, 248, 0.98) 0%, 
+        rgba(255, 250, 240, 0.95) 100%
+    );
+    border-radius: 12px;
+    padding: 2rem 1.5rem;
+    color: var(--sumi);
+    box-shadow: 
+        0 10px 40px rgba(0, 0, 0, 0.4),
+        inset 0 0 60px rgba(212, 175, 55, 0.1);
+    position: relative;
+    overflow: hidden;
+    animation: cardAppear 0.8s ease-out;
+}
+
+@keyframes cardAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.8) rotateX(20deg);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) rotateX(0);
+    }
+}
+
+/* 和紙テクスチャ風 */
+.result-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+}
+
+/* 装飾枠 */
+.result-card::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 8px;
+    pointer-events: none;
+}
+
+.card-header {
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.fortune-label {
+    font-size: 0.9rem;
+    color: var(--enji);
+    letter-spacing: 0.3em;
+}
+
+.fortune-rank {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.fortune-rank .rank-text {
+    font-family: var(--font-antique);
+    font-size: 4rem;
+    color: var(--aka);
+    text-shadow: 2px 2px 0 rgba(212, 175, 55, 0.3);
+    letter-spacing: 0.2em;
+    display: inline-block;
+    animation: fortuneReveal 1s ease-out;
+}
+
+@keyframes fortuneReveal {
+    0% {
+        opacity: 0;
+        transform: scale(2);
+        filter: blur(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0);
+    }
+}
+
+/* 大吉特別演出 */
+.fortune-rank.daikichi .rank-text {
+    background: linear-gradient(180deg, var(--aka) 0%, var(--kin) 50%, var(--aka) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: fortuneReveal 1s ease-out, shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.2); }
+}
+
+/* 凶・大凶 */
+.fortune-rank.kyo .rank-text,
+.fortune-rank.daikyo .rank-text {
+    color: #4A4A4A;
+}
+
+/* 和歌セクション */
+.waka-section {
+    background: rgba(139, 69, 19, 0.05);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.waka-section::before,
+.waka-section::after {
+    content: '〽';
+    position: absolute;
+    font-size: 1.5rem;
+    color: var(--kin);
+    opacity: 0.5;
+}
+
+.waka-section::before {
+    top: 0.5rem;
+    left: 0.5rem;
+}
+
+.waka-section::after {
+    bottom: 0.5rem;
+    right: 0.5rem;
+    transform: rotate(180deg);
+}
+
+.waka-text {
+    font-family: var(--font-antique);
+    font-size: 1.1rem;
+    line-height: 2;
+    text-align: center;
+    color: var(--sumi);
+    margin-bottom: 1rem;
+}
+
+.waka-text .kami {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.waka-text .shimo {
+    display: block;
+}
+
+.waka-author {
+    text-align: right;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* 運勢詳細 */
+.fortune-details {
+    display: grid;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.fortune-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px dashed rgba(139, 69, 19, 0.2);
+}
+
+.fortune-item:last-child {
+    border-bottom: none;
+}
+
+.fortune-item .item-icon {
+    font-size: 1.2rem;
+    width: 2rem;
+    text-align: center;
+}
+
+.fortune-item .item-label {
+    font-size: 0.9rem;
+    color: #666;
+    min-width: 4rem;
+}
+
+.fortune-item .item-value {
+    flex: 1;
+    font-size: 0.95rem;
+    color: var(--sumi);
+}
+
+/* ラッキーアイテム */
+.lucky-items {
+    display: flex;
+    justify-content: space-around;
+    background: linear-gradient(90deg, 
+        rgba(212, 175, 55, 0.1) 0%, 
+        rgba(212, 175, 55, 0.2) 50%,
+        rgba(212, 175, 55, 0.1) 100%
+    );
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.lucky-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.lucky-label {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.lucky-value {
+    font-family: var(--font-antique);
+    font-size: 1.1rem;
+    color: var(--enji);
+}
+
+/* シェアセクション */
+.share-section {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.share-button {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(180deg, var(--matcha) 0%, #5A6B2D 100%);
+    border: none;
+    border-radius: 8px;
+    color: var(--shiro);
+    font-family: var(--font-mincho);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 1rem;
+}
+
+.share-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+.share-links {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.share-link {
+    flex: 1;
+    padding: 0.8rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.share-link.twitter {
+    background: #000;
+    color: #fff;
+}
+
+.share-link.line {
+    background: #06C755;
+    color: #fff;
+}
+
+.share-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* 戻るボタン */
+.back-button {
+    display: block;
+    width: 100%;
+    margin-top: 1.5rem;
+    padding: 0.8rem;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    color: var(--shiro);
+    font-family: var(--font-mincho);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.back-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* フッター */
+.footer {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.footer-author {
+    margin-bottom: 0.8rem;
+}
+
+.author-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--kitsune);
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid rgba(240, 208, 138, 0.3);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.author-link:hover {
+    background: rgba(240, 208, 138, 0.1);
+    border-color: var(--kitsune);
+    transform: translateY(-2px);
+}
+
+.x-icon {
+    font-weight: bold;
+}
+
+/* ============================================
+   ユーティリティ
+   ============================================ */
+
+.hidden {
+    display: none !important;
+}
+
+/* ============================================
+   レスポンシブ
+   ============================================ */
+
+@media (max-width: 480px) {
+    .main-title {
+        font-size: 2.2rem;
+    }
+    
+    .title-deco {
+        font-size: 1.5rem;
+    }
+    
+    .result-card {
+        padding: 1.5rem 1rem;
+    }
+    
+    .fortune-rank .rank-text {
+        font-size: 3rem;
+    }
+    
+    .waka-text {
+        font-size: 1rem;
+    }
+    
+    .lucky-items {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    
+    .lucky-item {
+        flex-direction: row;
+        justify-content: center;
+        gap: 1rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        padding: 3rem 2rem;
+    }
+    
+    .main-title {
+        font-size: 3.5rem;
+    }
+    
+    .fortune-rank .rank-text {
+        font-size: 5rem;
+    }
+}
+

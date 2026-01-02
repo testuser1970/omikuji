@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新春おみくじ 2026</title>
+    <meta name="description" content="新年の運勢を占う本格おみくじ。百人一首の和歌とともに、あなたの一年を占います。">
+    <meta property="og:title" content="新春おみくじ 2026">
+    <meta property="og:description" content="新年の運勢を占う本格おみくじ">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=Zen+Antique&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 背景装飾 -->
+    <div class="bg-decoration">
+        <div class="sakura-container" id="sakuraContainer"></div>
+    </div>
+
+    <!-- メインコンテナ -->
+    <main class="container">
+        <!-- タイトル画面 -->
+        <section id="titleScreen" class="screen active">
+            <div class="title-content">
+                <div class="year-badge">2026</div>
+                <h1 class="main-title">
+                    <span class="title-deco left">🎍</span>
+                    新春おみくじ
+                    <span class="title-deco right">🎍</span>
+                </h1>
+                <p class="subtitle">〜 百人一首と紡ぐ、あなたの運勢 〜</p>
+                
+                <div class="omikuji-box" id="omikujiBox">
+                    <div class="box-top"></div>
+                    <div class="box-body">
+                        <div class="box-slot"></div>
+                    </div>
+                    <div class="sticks" id="sticks">
+                        <div class="stick"></div>
+                        <div class="stick"></div>
+                        <div class="stick"></div>
+                        <div class="stick"></div>
+                        <div class="stick"></div>
+                    </div>
+                </div>
+
+                <button id="drawButton" class="draw-button">
+                    <span class="button-text">おみくじを引く</span>
+                    <span class="button-sub">一日一回</span>
+                </button>
+
+                <div id="alreadyDrawn" class="already-drawn hidden">
+                    <p class="drawn-message">本日のおみくじは引き済みです</p>
+                    <p class="next-time">次回は明日の0:00から</p>
+                    <button id="showResultButton" class="show-result-button">結果を見る</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 演出画面 -->
+        <section id="drawingScreen" class="screen">
+            <div class="drawing-content">
+                <div class="drawing-box">
+                    <div class="box-shake">
+                        <div class="box-top"></div>
+                        <div class="box-body">
+                            <div class="box-slot"></div>
+                        </div>
+                    </div>
+                    <div class="rising-stick" id="risingStick">
+                        <div class="stick-number" id="stickNumber"></div>
+                    </div>
+                </div>
+                <p class="drawing-text" id="drawingText">おみくじ箱を振っています...</p>
+            </div>
+        </section>
+
+        <!-- 結果画面 -->
+        <section id="resultScreen" class="screen">
+            <div class="result-content">
+                <div class="result-card" id="resultCard">
+                    <div class="card-header">
+                        <span class="fortune-label">運勢</span>
+                    </div>
+                    
+                    <div class="fortune-rank" id="fortuneRank">
+                        <!-- 運勢が入る -->
+                    </div>
+
+                    <div class="waka-section">
+                        <div class="waka-text" id="wakaText">
+                            <!-- 和歌が入る -->
+                        </div>
+                        <div class="waka-author" id="wakaAuthor">
+                            <!-- 作者が入る -->
+                        </div>
+                    </div>
+
+                    <div class="fortune-details" id="fortuneDetails">
+                        <!-- 各運勢が入る -->
+                    </div>
+
+                    <div class="lucky-items">
+                        <div class="lucky-item">
+                            <span class="lucky-label">🎨 色</span>
+                            <span class="lucky-value" id="luckyColor"></span>
+                        </div>
+                        <div class="lucky-item">
+                            <span class="lucky-label">🔢 数</span>
+                            <span class="lucky-value" id="luckyNumber"></span>
+                        </div>
+                        <div class="lucky-item">
+                            <span class="lucky-label">🧭 方位</span>
+                            <span class="lucky-value" id="luckyDirection"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="share-section">
+                    <button id="shareButton" class="share-button">
+                        <span>📸 画像を保存してシェア</span>
+                    </button>
+                    <div class="share-links">
+                        <a id="shareTwitter" href="#" class="share-link twitter" target="_blank" rel="noopener">
+                            𝕏 でシェア
+                        </a>
+                        <a id="shareLine" href="#" class="share-link line" target="_blank" rel="noopener">
+                            LINE でシェア
+                        </a>
+                    </div>
+                </div>
+
+                <button id="backButton" class="back-button">トップに戻る</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- シェア用Canvas（非表示） -->
+    <canvas id="shareCanvas" width="1080" height="1350" style="display: none;"></canvas>
+
+    <footer class="footer">
+        <p class="footer-author">
+            <a href="https://x.com/Tsubaki_Yutaka" target="_blank" rel="noopener" class="author-link">
+                <span class="x-icon">𝕏</span> @Tsubaki_Yutaka
+            </a>
+        </p>
+        <p>© 2026 新春おみくじ</p>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/share.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
+
